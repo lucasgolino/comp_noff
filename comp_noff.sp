@@ -16,21 +16,18 @@ public Plugin:myinfo =
 
 public OnClientPutInServer(int client)
 {
-    SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
 public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
 {
-	int attackerUserId = attacker;
-	int victimUserId = victim;
-
 	char WeaponCallBack[32];
 	GetEdictClassname(inflictor, WeaponCallBack, sizeof(WeaponCallBack));
 
-	if ((!IsValidEntity(victimUserId)) || (!IsValidEntity(attackerUserId)))
+	if ((!IsValidEntity(victim)) || (!IsValidEntity(attacker)))
 		return Plugin_Continue;
 
-	if ((strlen(WeaponCallBack) <= 0) || (attackerUserId == victimUserId) || (GetClientTeam(victimUserId) != GetClientTeam(attackerUserId)) )
+	if ((strlen(WeaponCallBack) <= 0) || (attacker == victim) || (GetClientTeam(victim) != GetClientTeam(attacker)) )
 		return Plugin_Continue;
 
 	if (StrEqual(WeaponCallBack, "inferno", false))
