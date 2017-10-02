@@ -16,22 +16,36 @@ public Plugin:myinfo =
 
 public OnClientPutInServer(int client)
 {
-	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+    SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
 public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
 {
+	if(!IsClientValid(attacker) || !IsClientValid(victim))
+		return Plugin_Handled;
+
+	int attackerUserId = attacker;
+	int victimUserId = victim;
+
 	char WeaponCallBack[32];
 	GetEdictClassname(inflictor, WeaponCallBack, sizeof(WeaponCallBack));
 
-	if ((!IsValidEntity(victim)) || (!IsValidEntity(attacker)))
+	if ((!IsValidEntity(victimUserId)) || (!IsValidEntity(attackerUserId)))
 		return Plugin_Continue;
 
-	if ((strlen(WeaponCallBack) <= 0) || (attacker == victim) || (GetClientTeam(victim) != GetClientTeam(attacker)) )
+	if ((strlen(WeaponCallBack) <= 0) || (attackerUserId == victimUserId) || (GetClientTeam(victimUserId) != GetClientTeam(attackerUserId)) )
 		return Plugin_Continue;
 
 	if (StrEqual(WeaponCallBack, "inferno", false))
 		return Plugin_Continue;
 
 	return Plugin_Handled;
+}
+
+public bool:IsClientValid(client)
+{
+	if(client > 0 && client <= MaxClients && IsClientInGame(clienst))
+		return true;
+
+	return false;
 }
