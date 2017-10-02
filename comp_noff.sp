@@ -44,7 +44,7 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 
 public bool:IsClientValid(client)
 {
-	if(client > 0 && client <= MaxClients && IsClientInGame(clienst))
+	if(client > 0 && client <= MaxClients && IsClientInGame(client))
 		return true;
 
 	return false;
