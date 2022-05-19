@@ -21,7 +21,13 @@ public OnClientPutInServer(int client)
 
 public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
 {
+	char WeaponCallBack[32];
+	GetEdictClassname(inflictor, WeaponCallBack, sizeof(WeaponCallBack));
+	
 	if (damagetype & DMG_FALL)
+		return Plugin_Continue;
+
+	if(!IsClientValid(attacker) && damagetype & DMG_BLAST) // C4 DAMAGE
 		return Plugin_Continue;
 	
 	if(!IsClientValid(attacker) || !IsClientValid(victim))
@@ -29,9 +35,6 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 
 	int attackerUserId = attacker;
 	int victimUserId = victim;
-
-	char WeaponCallBack[32];
-	GetEdictClassname(inflictor, WeaponCallBack, sizeof(WeaponCallBack));
 
 	if ((!IsValidEntity(victimUserId)) || (!IsValidEntity(attackerUserId)))
 		return Plugin_Continue;
